@@ -1,0 +1,27 @@
+apiVersion: templates.gatekeeper.sh/v1beta1
+kind: ConstraintTemplate
+metadata:
+  name: k8sblockpdbzerounavailable
+spec:
+  crd:
+    spec:
+      names:
+        kind: K8sBlockPDBZeroUnavailable
+  targets:
+    - target: admission.k8s.gatekeeper.sh
+      rego: |
+        package k8sblockpdbzerounavailable
+
+        violation[{"msg": msg}] {
+          # Check if the request is for a PodDisruptionBudget
+          input.review.kind.kind == "PodDisruptionBudget"
+          input.review.kind.group == "policy"
+
+          # Extract the maxUnavailable field
+          max_unavailable := input.review.object.spec.maxUnavailable
+
+          # If maxUnavailable is set to 0, this is a violation
+          max_unavailable == 0
+
+          msg := "spec.maxUnavailable cannot be 0"
+        }
