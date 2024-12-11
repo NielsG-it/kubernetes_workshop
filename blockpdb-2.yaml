@@ -23,15 +23,3 @@ spec:
           provided > 1
           msg := sprintf("PodDisruptionBudget maxUnavailable is %v, must be <= 1", [provided])
         }
-
----
-# Constraint definition
-apiVersion: constraints.gatekeeper.sh/v1beta1
-kind: K8sMaxUnavailable
-metadata:
-  name: maxunavailable-must-be-one
-spec:
-  match:
-    kinds:
-      - apiGroups: ["policy"]
-        kinds: ["PodDisruptionBudget"]
