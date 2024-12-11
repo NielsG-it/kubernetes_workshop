@@ -1,0 +1,32 @@
+apiVersion: templates.gatekeeper.sh/v1beta1
+kind: ConstraintTemplate
+metadata:
+  name: k8smaxunavailable
+spec:
+  crd:
+    spec:
+      names:
+        kind: K8sMaxUnavailable
+      validation:
+        # Validation schema for parameters if needed
+        openAPIV3Schema:
+          properties:
+            maxUnavailable:
+              type: integer
+              default: 1
+  targets:
+    - target: admission.k8s.gatekeeper.sh
+      rego: |
+        package k8smaxunavailable
+
+        violation[{"msg": msg}] {
+          input.review.kind.kind == "PodDisruptionBudget"
+
+          # Extract the maxUnavailable value. If not set, assume it's not compliant.
+          provided := input.review.object.spec.maxUnavailable
+
+          # Check if maxUnavailable > 1
+          provided > 1
+
+          msg := sprintf("PodDisruptionBudget maxUnavailable is %v, must be <= 1", [provided])
+        }
