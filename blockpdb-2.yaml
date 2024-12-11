@@ -11,10 +11,7 @@ spec:
       validation:
         # OpenAPI v3 schema to validate parameters
         openAPIV3Schema:
-          properties:
-            maxUnavailable:
-              type: integer
-              default: 1
+          properties: {}
   targets:
     - target: admission.k8s.gatekeeper.sh
       rego: |
