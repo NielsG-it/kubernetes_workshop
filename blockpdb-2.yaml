@@ -1,3 +1,4 @@
+# ConstraintTemplate definition
 apiVersion: templates.gatekeeper.sh/v1beta1
 kind: ConstraintTemplate
 metadata:
@@ -8,7 +9,7 @@ spec:
       names:
         kind: K8sMaxUnavailable
       validation:
-        # Validation schema for parameters if needed
+        # OpenAPI v3 schema to validate parameters
         openAPIV3Schema:
           properties:
             maxUnavailable:
@@ -21,12 +22,19 @@ spec:
 
         violation[{"msg": msg}] {
           input.review.kind.kind == "PodDisruptionBudget"
-
-          # Extract the maxUnavailable value. If not set, assume it's not compliant.
           provided := input.review.object.spec.maxUnavailable
-
-          # Check if maxUnavailable > 1
           provided > 1
-
           msg := sprintf("PodDisruptionBudget maxUnavailable is %v, must be <= 1", [provided])
         }
+
+---
+# Constraint definition
+apiVersion: constraints.gatekeeper.sh/v1beta1
+kind: K8sMaxUnavailable
+metadata:
+  name: maxunavailable-must-be-one
+spec:
+  match:
+    kinds:
+      - apiGroups: ["policy"]
+        kinds: ["PodDisruptionBudget"]
