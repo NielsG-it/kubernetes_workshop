@@ -20,6 +20,6 @@ spec:
         violation[{"msg": msg}] {
           input.review.kind.kind == "PodDisruptionBudget"
           provided := input.review.object.spec.maxUnavailable
-          provided > 1
-          msg := sprintf("PodDisruptionBudget maxUnavailable is %v, must be <= 1", [provided])
+          provided == 0
+          msg := sprintf("PodDisruptionBudget maxUnavailable is %v, must not be 0", [provided])
         }
