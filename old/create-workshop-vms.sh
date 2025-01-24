@@ -10,8 +10,8 @@ RESOURCE_GROUP="myWorkshopRG"          # The name of the Azure resource group
 LOCATION="westeurope"                      # Azure region (e.g. eastus, westus, etc.)
 VM_SIZE="Standard_B2s"                 # VM size/type
 ADMIN_USERNAME="bitbash"             # Admin username for the VMs
-ADMIN_PASSWORD=""      # Admin password (only for workshop/testing)
-VM_COUNT=3                             # Number of VMs to create
+ADMIN_PASSWORD="Superbitbash1234!"      # Admin password (only for workshop/testing)
+VM_COUNT=30                             # Number of VMs to create
 
 # --- End of configuration ---
 
